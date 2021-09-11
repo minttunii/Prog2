@@ -16,7 +16,8 @@ int main()
         return 1;
     }
 
-    cout << "The cube of " << 2 << " is " << cube << "." << endl;
+    cout << "The cube of " << n << " is " << cube << "." << endl;
 
     return 0;
 }
+
