@@ -13,19 +13,19 @@ unsigned weekly_excercise_score(unsigned int n, unsigned int g){
     float n_points = (n * 100) / MAX_N_POINTS;
     float n_and_g_points = ((n + g) * 100) / (MAX_N_POINTS + MAX_G_POINTS);
     float best_score = max(n_points, n_and_g_points);
-    if(best_score < 50) return 0;
-    if(best_score < 60) return 1;
-    if(best_score < 70) return 2;
-    if(best_score < 80) return 3;
-    if(best_score < 90) return 4;
+    if(best_score < 50.0) return 0;
+    if(best_score < 60.0) return 1;
+    if(best_score < 70.0) return 2;
+    if(best_score < 80.0) return 3;
+    if(best_score < 90.0) return 4;
     return 5;
 }
 
 unsigned gui_excercise_score(unsigned g){
-    float g_percentage = g / MAX_G_POINTS * 100;
-    if(g_percentage < 30) return 2;
-    if(g_percentage < 40) return 3;
-    if(g_percentage < 50) return 4;
+    float g_percentage = (g * 100) / MAX_G_POINTS;
+    if(g_percentage < 30.0) return 2;
+    if(g_percentage < 40.0) return 3;
+    if(g_percentage < 50.0) return 4;
     return 5;
 }
 
@@ -40,23 +40,35 @@ unsigned project_points_score(unsigned p){
 
 unsigned rounded_number(float fp){
     unsigned rounded_value = static_cast<unsigned>(fp);
-    if(fp - rounded_value > 0.5) return rounded_value + 1;
+    if(fp - rounded_value > 0.5){
+        return (rounded_value + 1);
+    }
     return rounded_value;
 }
 
 unsigned final_grade(float mean, unsigned g){
     unsigned rounded_mean = rounded_number(mean);
-    if (rounded_mean < 3) return rounded_mean;
-    if (rounded_mean < 4 and g >= 3) return rounded_mean;
-    if (rounded_mean < 5 and g >= 4) return rounded_mean;
-    if (rounded_mean < 4 and g >= 5) return rounded_mean;
-    if (rounded_mean == 5 and g == 5) return rounded_mean;
+    if (rounded_mean < 3){
+        return rounded_mean;
+    }
+    if (rounded_mean < 4 and g >= 3){
+        return rounded_mean;
+    }
+    if (rounded_mean < 5 and g >= 4){
+        return rounded_mean;
+    }
+    if (rounded_mean < 4 and g >= 5){
+        return rounded_mean;
+    }
+    if (rounded_mean == 5 and g == 5){
+        return rounded_mean;
+    }
     return g;
 }
 
 
-int main()
-{
+int main(){
+
     unsigned int n = 0;
     unsigned int g = 0;
     unsigned int p = 0;
@@ -68,7 +80,7 @@ int main()
     cout << "Enter exam grade (if no exam, enter zero): ";
     cin >> e;
 
-    float mean = 0;
+    float mean = 0.0;
     int score_w = weekly_excercise_score(n, g);
     int score_p = project_points_score(p);
 
@@ -78,11 +90,11 @@ int main()
     }
 
     if (e == 0){
-        mean = (score_p + score_w) / 2 - 2;
+        mean = ((score_p + score_w) / 2.0 )- 2.0;
     }
 
     else{
-        mean = (score_p + score_w + e) / 3;
+        mean = (score_p + score_w + e) / 3.0;
     }
 
     cout <<"The final grade is "<< final_grade(mean, gui_excercise_score(g)) << endl;
