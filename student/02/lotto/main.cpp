@@ -3,18 +3,18 @@
 using namespace std;
 
 // Funktio laskee kertoman
-unsigned long int factorial(unsigned long int n){
+unsigned long int factorial(int n){
     if(n > 1){
         return n * factorial(n - 1);
     }
     return 1;
 }
 
-unsigned long int lottery_rows(unsigned long int balls, unsigned long int drawn_balls){
+unsigned long int lottery_rows(int balls, int drawn_balls){
     return factorial(balls) / (factorial(balls - drawn_balls) * factorial(drawn_balls));
 }
 
-bool error_check(unsigned long int balls, unsigned long int drawn_balls){
+bool error_check(int balls, int drawn_balls){
     if (balls < 0 or drawn_balls < 0){
         cout << "The number of balls must be a positive number." << endl;
         return EXIT_FAILURE;
@@ -32,19 +32,17 @@ bool error_check(unsigned long int balls, unsigned long int drawn_balls){
 
 int main()
 {
-    unsigned long int lottery_balls = 0;
-    unsigned long int drawn_balls = 0;
+    int lottery_balls = 0;
+    int drawn_balls = 0;
 
     cout <<"Enter the total number of lottery balls: ";
     cin >> lottery_balls;
     cout <<"Enter the number of drawn balls: ";
     cin >> drawn_balls;
 
-    //cout << factorial(lottery_balls) << endl;
-
-    //cout << lottery_rows(lottery_balls, drawn_balls) << endl;
-
-    error_check(lottery_balls, drawn_balls);
+    if (not error_check(lottery_balls, drawn_balls)){
+        cout << "The probability of guessing all " << drawn_balls << " balls correctly is 1/" << lottery_rows(lottery_balls, drawn_balls) << endl;
+    }
 
     return EXIT_SUCCESS;
 }
