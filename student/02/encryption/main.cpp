@@ -16,13 +16,15 @@ int main()
     }
 
     // Merkkijono saa sisältää vain anglisia pienaakkosia
-    for(size_t i = 0; i < encryption_key.length(); ++i){
+
+    for(size_t i = 0; i < encryption_key.size(); ++i){
         char char_to_check = encryption_key.at(i);
         if(char_to_check < 'a' or char_to_check > 'z'){
             cout << "Error! The encryption key must contain only lower case characters." << endl;
             return EXIT_FAILURE;
         }
     }
+
 
     // Merkkijonon pitää sisältää kaikki angliset pienaakkoset
     for(char char_to_find = 'a'; char_to_find <= 'z'; ++char_to_find){
@@ -40,6 +42,17 @@ int main()
 
     string::size_type text_lenght = text_to_encrypt.length();
     string encrypted_text = "";
+
+    // Tarkistetaan, että salattava teksti sisältää vain pieniä kirjaimia
+
+    for(size_t i = 0; i < text_lenght; ++i){
+        char char_to_check = text_to_encrypt.at(i);
+        if(char_to_check < 'a' or char_to_check > 'z'){
+            cout << "Error! The text to be encrypted must contain only lower case characters." << endl;
+            return EXIT_FAILURE;
+        }
+    }
+
 
     for(size_t i = 0; i < text_lenght; ++i){
         char uncrypted_char = text_to_encrypt.at(i);
