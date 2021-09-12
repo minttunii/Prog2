@@ -30,8 +30,8 @@ int main()
     for(char char_to_find = 'a'; char_to_find <= 'z'; ++char_to_find){
         size_t pos = encryption_key.find(char_to_find);
         if(pos == string::npos){
-            return EXIT_FAILURE;
             cout <<"Error! The encryption key must contain all alphabets a-z." << endl;
+            return EXIT_FAILURE;
         }
     }
 
