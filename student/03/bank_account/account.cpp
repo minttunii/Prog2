@@ -26,12 +26,17 @@ void Account::set_credit_limit(int credit_limit)
 
 void Account::save_money(int save)
 {
-
+    balance_ += save;
 }
 
 void Account::take_money(int take)
 {
-
+    if(balance_ + credit_limit_ >= take){
+        balance_ -= take;
+    }
+    else{
+        std::cout << "Cannot take money: balance underflow" << std::endl;
+    }
 }
 
 void Account::transfer_to(const Account &savings_account, int transfer)
