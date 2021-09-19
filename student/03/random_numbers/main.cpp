@@ -6,8 +6,12 @@ using namespace std;
 
 void produce_random_numbers(unsigned int lower, unsigned int upper)
 {
-    std::string command = "";
-    default_random_engine gen(15);
+    unsigned int seed = 0;
+    cout <<"Enter a seed value: ";
+    cin >> seed;
+
+    string command = "";
+    default_random_engine gen(seed);
     uniform_int_distribution<int> distr(lower, upper);
 
     while(command != "q"){
