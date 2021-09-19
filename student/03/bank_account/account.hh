@@ -15,7 +15,7 @@ public:
     void set_credit_limit(int credit_limit);
     void save_money(int save);
     void take_money(int take);
-    void transfer_to(Account& savings_account, int transfer);
+    void transfer_to(Account& account_name, int transfer);
 
 private:
     // Generates IBAN (based on running_number_ below).
