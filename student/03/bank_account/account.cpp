@@ -2,7 +2,8 @@
 #include <iostream>
 
 Account::Account(const std::string& owner, bool has_credit):
-    owner_(owner), has_credit_(has_credit), balance_(0), iban_("")
+    owner_(owner), has_credit_(has_credit), balance_(0), iban_(""),
+    credit_limit_(0)
 {
     generate_iban();
 }
@@ -14,7 +15,13 @@ void Account::print() const
 
 void Account::set_credit_limit(int credit_limit)
 {
-
+    // Vain luottokortti-tilille voi asettaa luottorajan
+    if(has_credit_){
+        credit_limit_ = credit_limit;
+    }
+    else{
+        std::cout <<"Cannot set credit limit: the account has no credit card" << std::endl;
+    }
 }
 
 void Account::save_money(int save)
