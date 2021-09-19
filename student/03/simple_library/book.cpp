@@ -18,6 +18,7 @@ Book::Book(const std::string &author, const std::string &title):
 void Book::print() const
 {
     std::cout << author_ << " : " << title_ << std::endl;
+
     if(!is_loaned_){
         std::cout << "- available" << std::endl;
     }
@@ -29,9 +30,9 @@ void Book::print() const
     }
 }
 
-void Book::loan(const Date &loan_date)
+void Book::loan(const Date& loan_date)
 {
-    if(!is_loaned_){
+    if(is_loaned_){
         std::cout <<"Already loaned: cannot be loaned" << std::endl;
         return;
     }
