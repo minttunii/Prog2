@@ -31,17 +31,34 @@ void Account::save_money(int save)
 
 void Account::take_money(int take)
 {
+    // Tililtä voi ottaa rahaa vain jos saldo ja/tai luottoraja riittää
     if(balance_ + credit_limit_ >= take){
         balance_ -= take;
+        std::cout << take << " euros taken: new balance of " << iban_ << " is " << balance_ << " euros" << std::endl;
+    }
+    else if(has_credit_){
+        std::cout <<"Cannot take money: credit limit overflow" << std::endl;
     }
     else{
         std::cout << "Cannot take money: balance underflow" << std::endl;
     }
 }
 
-void Account::transfer_to(const Account &savings_account, int transfer)
+void Account::transfer_to(Account& savings_account, int transfer)
 {
+    if(balance_ + credit_limit_ >= transfer){
+        balance_ -= transfer;
+        savings_account.balance_ += transfer;
+        std::cout << transfer << " euros taken: new balance of " << iban_ << " is " << balance_ << " euros" << std::endl;
 
+    }
+    else if(has_credit_){
+        std::cout <<"Cannot take money: credit limit overflow" << std::endl;
+    }
+    else{
+        std::cout << "Cannot take money: balance underflow" << std::endl;
+        std::cout <<"Transfer from " << iban_ << " failed" << std::endl;
+    }
 }
 
 // Setting initial value for the static attribute running_number_
