@@ -54,6 +54,7 @@ void Account::transfer_to(Account& savings_account, int transfer)
     }
     else if(has_credit_){
         std::cout <<"Cannot take money: credit limit overflow" << std::endl;
+        std::cout <<"Transfer from " << iban_ << " failed" << std::endl;
     }
     else{
         std::cout << "Cannot take money: balance underflow" << std::endl;
