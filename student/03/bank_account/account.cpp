@@ -10,7 +10,7 @@ Account::Account(const std::string& owner, bool has_credit):
 
 void Account::print() const
 {
-    std::cout << owner_ << " : " << iban_ << " : " << balance_ << std::endl;
+    std::cout << owner_ << " : " << iban_ << " : " << balance_ << " euros" << std::endl;
 }
 
 void Account::set_credit_limit(int credit_limit)
