@@ -44,7 +44,35 @@ void Account::take_money(int take)
     }
 }
 
-void Account::transfer_to(Account& account_name, int transfer)
+void Account::transfer_to(Account &account_name, int transfer)
+{
+    // Jos kyseessä on luottokortti tili
+    if(has_credit_){
+        if(balance_ + credit_limit_ >= transfer){
+            balance_ -= transfer;
+            account_name.balance_ += transfer;
+            std::cout << transfer << " euros taken: new balance of " << iban_ << " is " << balance_ << " euros" << std::endl;
+        }
+        else{
+            std::cout <<"Cannot take money: credit limit overflow" << std::endl;
+            std::cout <<"Transfer from " << iban_ << " failed" << std::endl;
+        }
+
+    }
+    else{
+        if(balance_ >= transfer){
+            balance_ -= transfer;
+            account_name.balance_ += transfer;
+            std::cout << transfer << " euros taken: new balance of " << iban_ << " is " << balance_ << " euros" << std::endl;
+        }
+        else{
+            std::cout << "Cannot take money: balance underflow" << std::endl;
+            std::cout <<"Transfer from " << iban_ << " failed" << std::endl;
+        }
+    }
+}
+
+/*void Account::transfer_to(Account& account_name, int transfer)
 {
     if(balance_ + credit_limit_ >= transfer){
         balance_ -= transfer;
@@ -60,7 +88,9 @@ void Account::transfer_to(Account& account_name, int transfer)
         std::cout << "Cannot take money: balance underflow" << std::endl;
         std::cout <<"Transfer from " << iban_ << " failed" << std::endl;
     }
-}
+}*/
+
+
 
 // Setting initial value for the static attribute running_number_
 int Account::running_number_ = 0;
