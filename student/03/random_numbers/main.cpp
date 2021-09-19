@@ -9,6 +9,8 @@ void produce_random_numbers(unsigned int lower, unsigned int upper)
     unsigned int seed = 0;
     cout <<"Enter a seed value: ";
     cin >> seed;
+    cout << endl;
+
 
     string command = "";
     default_random_engine gen(seed);
@@ -18,6 +20,8 @@ void produce_random_numbers(unsigned int lower, unsigned int upper)
         cout <<"Your drawn random number is " << distr(gen) << endl;
         cout <<"Press q to quit or any other key to continue: ";
         cin >> command;
+        cout << endl;
+
     }
 }
 
