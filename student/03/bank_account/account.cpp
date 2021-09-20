@@ -48,8 +48,9 @@ void Account::transfer_to(Account& account_name, int transfer)
 {
     if(balance_ + credit_limit_ >= transfer){
         balance_ -= transfer;
-        account_name.balance_ += transfer;
-        std::cout << transfer << " euros taken: new balance of " << iban_ << " is " << balance_ << " euros" << std::endl;
+        account_name.save_money(transfer);
+        std::cout << transfer << " euros taken: new balance of " << iban_ <<
+                     " is " << balance_ << " euros" << std::endl;
 
     }
     else if(has_credit_){
