@@ -14,7 +14,7 @@ public:
     void print() const;
     void set_credit_limit(int credit_limit);
     void save_money(int save);
-    void take_money(int take);
+    bool take_money(int take);
     void transfer_to(Account& account_name, int transfer);
 
 private:

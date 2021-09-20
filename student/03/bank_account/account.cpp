@@ -29,36 +29,47 @@ void Account::save_money(int save)
     balance_ += save;
 }
 
-void Account::take_money(int take)
+bool Account::take_money(int take)
 {
-    // Tililtä voi ottaa rahaa vain jos saldo ja/tai luottoraja riittää
-    if((balance_ + credit_limit_) >= take){
-        balance_ -= take;
-        std::cout << take << " euros taken: new balance of " << iban_ << " is " << balance_ << " euros" << std::endl;
+    // Luottokortillisen tilin tapaus
+    if(has_credit_){
+        if((balance_ + credit_limit_) >= take){
+            balance_ -= take;
+            std::cout << take << " euros taken: new balance of " << iban_ << " is " << balance_ << " euros" << std::endl;
+            return true;
+        }
+
+        else{
+            std::cout <<"Cannot take money: credit limit overflow" << std::endl;
+            return false;
+        }
     }
-    else if(has_credit_){
-        std::cout <<"Cannot take money: credit limit overflow" << std::endl;
-    }
+
+    //Muiden tilien tapauksessa
     else{
-        std::cout << "Cannot take money: balance underflow" << std::endl;
+        if(balance_ >= take){
+            balance_ -= take;
+            std::cout << take << " euros taken: new balance of " << iban_ << " is " << balance_ << " euros" << std::endl;
+            return true;
+        }
+
+        else{
+            std::cout << "Cannot take money: balance underflow" << std::endl;
+            return false;
+        }
     }
+
 }
 
-void Account::transfer_to(Account& account_name, int transfer)
+void Account::transfer_to(Account &account_name, int transfer)
 {
-    if((balance_ + credit_limit_) >= transfer){
-        balance_ -= transfer;
-        account_name.save_money(transfer);
-        std::cout << transfer << " euros taken: new balance of " << iban_ <<
-                     " is " << balance_ << " euros" << std::endl;
+    bool success = take_money(transfer);
 
+    if(success){
+        account_name.save_money(transfer);
     }
-    else if(has_credit_){
-        std::cout <<"Cannot take money: credit limit overflow" << std::endl;
-        std::cout <<"Transfer from " << iban_ << " failed" << std::endl;
-    }
+
     else{
-        std::cout << "Cannot take money: balance underflow" << std::endl;
         std::cout <<"Transfer from " << iban_ << " failed" << std::endl;
     }
 }
