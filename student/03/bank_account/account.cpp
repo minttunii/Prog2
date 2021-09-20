@@ -32,7 +32,7 @@ void Account::save_money(int save)
 void Account::take_money(int take)
 {
     // Tililtä voi ottaa rahaa vain jos saldo ja/tai luottoraja riittää
-    if(balance_ + credit_limit_ >= take){
+    if((balance_ + credit_limit_) >= take){
         balance_ -= take;
         std::cout << take << " euros taken: new balance of " << iban_ << " is " << balance_ << " euros" << std::endl;
     }
@@ -46,7 +46,7 @@ void Account::take_money(int take)
 
 void Account::transfer_to(Account& account_name, int transfer)
 {
-    if(balance_ + credit_limit_ >= transfer){
+    if((balance_ + credit_limit_) >= transfer){
         balance_ -= transfer;
         account_name.save_money(transfer);
         std::cout << transfer << " euros taken: new balance of " << iban_ <<
