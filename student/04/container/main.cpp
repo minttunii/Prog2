@@ -57,16 +57,30 @@ bool is_arithmetic_series(std::vector<int>& integers){
 }
 
 bool is_geometric_series(std::vector<int>& integers){
-    int ratio = integers.at(1) / integers.at(0);  //Assumed that size is larger than one
+    if(integers.at(0) != 0){
+         int ratio = integers.at(1) / integers.at(0);  //Assumed that size is larger than one
 
-    size_t i = 1;
-    while(i < integers.size()){
-        if((integers.at(i) / integers.at(i - 1)) != ratio){
-            return false;
-        }
-        ++i;
+         size_t i = 1;
+         while(i < integers.size()){
+             // Denominator can't be zero
+             if(integers.at(i -1) != 0){
+                 if((integers.at(i) / integers.at(i - 1)) != ratio){
+                     return false;
+                }
+             }
+
+             else{
+                 return false;
+             }
+
+             ++i;
+         }
+         return true;
     }
-    return true;
+
+    else{
+        return false;
+    }
 }
 
 
