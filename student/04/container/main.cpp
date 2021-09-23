@@ -45,6 +45,7 @@ bool is_ordered_non_strict_ascending(std::vector<int>& integers){
 
 bool is_arithmetic_series(std::vector<int>& integers){
     int difference = integers.at(1) - integers.at(0);  //Assumed that size is larger than one
+
     size_t i = 1;
     while(i < integers.size()){
         if((integers.at(i) - integers.at(i - 1)) != difference){
@@ -53,10 +54,18 @@ bool is_arithmetic_series(std::vector<int>& integers){
         ++i;
     }
     return true;
-
 }
 
 bool is_geometric_series(std::vector<int>& integers){
+    int ratio = integers.at(1) / integers.at(0);  //Assumed that size is larger than one
+
+    size_t i = 1;
+    while(i < integers.size()){
+        if((integers.at(i) / integers.at(i - 1)) != ratio){
+            return false;
+        }
+        ++i;
+    }
     return true;
 }
 
