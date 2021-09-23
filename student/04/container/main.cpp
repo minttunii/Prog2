@@ -2,6 +2,8 @@
 #include <iostream>
 #include <vector>
 
+#include <string>
+
 
 void read_integers(std::vector< int >& ints, int count)
 {
@@ -29,6 +31,16 @@ bool same_values(std::vector<int>& integers){
 
 
 bool is_ordered_non_strict_ascending(std::vector<int>& integers){
+    // Are integers in non strict ascending order
+
+    size_t i = 1;
+    while(i < integers.size()){
+        std::cout << integers.at(i-1) << std::endl;
+        if(integers.at(i) < integers.at(i - 1)){
+            return false;
+        }
+        ++i;
+    }
     return true;
 }
 
