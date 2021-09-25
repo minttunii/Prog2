@@ -113,14 +113,26 @@ bool check_input(std::string x, std::string y,
     }
 
     // Peliruudun pitää olla vapaana
-    if(grid.at(std::stoi(x)).at(std::stoi(y)) != '.'){
+    if(grid.at(std::stoi(x) - 1).at(std::stoi(y) - 1) != '.'){
         std::cout << "The given place is already occupied" << std::endl;
         return false;
     }
     return true;
 }
 
+// Funktio lisää merkin tauluun pelaajan perusteella
+void add_coordinates(std::string x, std::string y,
+                     std::vector< std::vector<char> >& grid,
+                     int player_turn){
+    if(player_in_turn(player_turn) == "X"){
+        grid.at(std::stoi(x) -1).at(std::stoi(y) - 1) = 'X';
+    }
+    else{
+        grid.at(std::stoi(x) - 1).at(std::stoi(y) - 1) = '0';
+    }
+    print_grid(grid);
 
+}
 // Funktio kysyy ja lukee koordinaatit
 void read_coordinates(std::vector< std::vector<char> >& grid){
     std::cout << "Start game:" << std::endl;
@@ -142,11 +154,12 @@ void read_coordinates(std::vector< std::vector<char> >& grid){
         }
         std::cin >> y;
 
-        //Syötettä luetaan kunnes se kelpaa
+        //Syötettä luetaan käyttäjältä kunnes se kelpaa
         if(check_input(x, y, grid)){
             break;
         }
     }
+    add_coordinates(x, y, grid, player_turn);
     ++player_turn;
 }
 
