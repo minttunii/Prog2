@@ -33,6 +33,7 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 
 namespace  {
     const int DEFAULT_SIZE = 3;
@@ -47,11 +48,32 @@ void make_grid(std::vector< std::vector<char> >& grid, size_t n){
     }
 }
 
+//Funktio tulostaa pelilaudan
+void print_grid(std::vector< std::vector<char> >& grid){
+
+    // Tulostetaan x-akselin numerot tauluun
+    std::cout << "  ";
+    for(size_t x = 0; x < grid.size(); ++x){
+        std::cout << (x + 1) % 10 << ' ';
+    }
+    std::cout << std::endl;
+
+    //Tulostetaan y-akselin numerot ja loput taulusta riveittäin
+    for(size_t y = 0; y < grid.size(); ++y){
+        std::cout << (y + 1) % 10 << ' ';
+        for(size_t x = 0; x < grid.size(); ++x){
+            std::cout << grid.at(y).at(x) << ' ';
+        }
+        std::cout << std::endl;
+    }
+}
+
 
 int main()
 {
     std::vector< std::vector<char> > grid = {};
     make_grid(grid, DEFAULT_SIZE);
+    print_grid(grid);
 
     return 0;
 }
