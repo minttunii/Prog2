@@ -66,14 +66,49 @@ void print_grid(std::vector< std::vector<char> >& grid){
         }
         std::cout << std::endl;
     }
+    std::cout << std::endl;
 }
+
+// Funktio selvittää vuorossa olevan pelaajan ja palauttaa nimen
+std::string player_in_turn(int player_turn){
+    std::string player_name = "";
+
+    if(player_turn % 2 != 0){
+        player_name = "X";
+    }
+    else{
+        player_name = "0";
+    }
+    return player_name;
+}
+
+// Funktio kysyy ja lukee koordinaatit
+void read_coordinates(std::vector< std::vector<char> >& grid){
+    std::cout << "Start game:" << std::endl;
+    print_grid(grid);
+
+    int player_turn = 1;
+    std::string x = "";
+    std::string y = "";
+
+    std::cout << "For " << player_in_turn(player_turn) <<
+                 ", enter coordinates: x y>";
+    std::cin >> x;
+    std::cin >> y;
+
+
+}
+
+
+bool check_input();
+
 
 
 int main()
 {
     std::vector< std::vector<char> > grid = {};
     make_grid(grid, DEFAULT_SIZE);
-    print_grid(grid);
+    read_coordinates(grid);
 
     return 0;
 }
