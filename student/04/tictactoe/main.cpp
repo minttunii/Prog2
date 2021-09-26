@@ -220,21 +220,23 @@ bool check_for_winner(std::vector< std::vector<char> >& grid, int player_turn){
     return false;
 }
 
-// Funktio tarkastaa, tulleko pelilauta täyteen
-//bool is_grid_full(std::vector< std::vector<char> >& grid){
+// Funktio tarkastaa, tuleeko pelilauta täyteen
+bool is_grid_full(std::vector< std::vector<char> >& grid, int turn){
     //Jos ei tule voittoa, eikä pelilautaa laajenneta, peli loppuu
-    /*if(!check_for_winner(grid)){
+    if(! check_for_winner(grid, turn)){
         for(size_t i = 0; i < grid.size(); ++i){
-
             for(size_t j = 0; j < grid.size(); ++j){
                 if(grid.at(i).at(j) == '.'){
                     return false;
                 }
             }
         }
-    }*/
-   // return true;
-//}
+        std::cout << "No empty places" << std::endl;
+        std::cout << "Game over!" << std::endl;
+        return true;
+    }
+    return true;
+}
 
 
 // Funktio lisää merkin tauluun pelaajan perusteella
@@ -260,7 +262,7 @@ void read_coordinates(std::vector< std::vector<char> >& grid){
     std::string x = "";
     std::string y = "";
 
-    while(!check_for_winner(grid, player_turn)){
+    while(!is_grid_full(grid, player_turn)){
     while(true){
         std::cout << "For " << player_in_turn(player_turn) <<
                      ", enter coordinates: x y> ";
