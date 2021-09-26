@@ -83,6 +83,20 @@ std::string player_in_turn(int player_turn){
     return player_name;
 }
 
+// Funktio laajentaa pelilautaa sallittuun suuntaan
+void expand_board(std::vector< std::vector<char> >& grid,
+                  size_t x, size_t y){
+
+    // Laajeneminen alaspäin
+    if(x == (grid.size() + 1) || y == (grid.size() + 1)){
+        size_t n = grid.size();
+        for(size_t i = 0; i < n ; ++i){
+            grid.at(i).push_back('.');
+        }
+        std::vector<char> vector((n +1), '.');
+        grid.push_back(vector);
+    }
+}
 
 // Funktio tarkistaa käyttäjän antaman syötteen oikeellisuuden
 bool check_input(std::string x, std::string y,
@@ -104,12 +118,17 @@ bool check_input(std::string x, std::string y,
         return false;
     }
     // Koordinaatit ei voi ylittyä ja/tai alittua samaan aikaan
-    if((x1 <= 0 and y1 <= 0) or
+    if((x1 < 0 and y1 < 0) or
             (x2 >= (grid.size() + 1) and y2 >= (grid.size() + 1))
             or (x1 <= 0 and y2 >= grid.size()) or
             (y1 <= 0 and x2 >= grid.size())){
         std::cout << "Coordinate outside the board" << std::endl;
         return false;
+    }
+
+    //Tarkistetaan, pitääkö pelilautaa laajentaa
+    if(x2 == (grid.size() + 1) || y2 == (grid.size() + 1)|| x2 == 0 || y2 == 0){
+        expand_board(grid, x2, y2);
     }
 
     // Peliruudun pitää olla vapaana
@@ -238,11 +257,11 @@ bool is_grid_full(std::vector< std::vector<char> >& grid, int turn){
     return true;
 }
 
-
-// Funktio lisää merkin tauluun pelaajan perusteella
+// Funktio lisää merkin pelilautaan pelaajan perusteella
 void add_coordinates(std::string x, std::string y,
                      std::vector< std::vector<char> >& grid,
                      int player_turn){
+
     if(player_in_turn(player_turn) == "X"){
         grid.at(std::stoi(y) -1).at(std::stoi(x) - 1) = 'X';
     }
