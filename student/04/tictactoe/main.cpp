@@ -43,9 +43,9 @@ namespace  {
 // Funktio muodostaa halutun kokoisen peliruudukon pelin alkaessa
 void make_grid(std::vector< std::vector<char> >& grid, size_t n){
 
-    for(size_t column = 0; column < n; ++column){
-        std::vector<char> column_vector(n, '.');
-        grid.push_back(column_vector);
+    for(size_t i = 0; i < n; ++i){
+        std::vector<char> vector(n, '.');
+        grid.push_back(vector);
     }
 }
 
@@ -113,11 +113,22 @@ bool check_input(std::string x, std::string y,
     }
 
     // Peliruudun pitää olla vapaana
-    if(grid.at(std::stoi(x) - 1).at(std::stoi(y) - 1) != '.'){
+    if(grid.at(y1 - 1).at(x1 - 1) != '.'){
         std::cout << "The given place is already occupied" << std::endl;
         return false;
     }
     return true;
+}
+
+// Funktio käy läpi ja tarkastaa eri voittotilanteet
+bool check_for_winner(std::vector< std::vector<char> >& grid){
+    // Voitto rivillä
+
+    // Voitto sarakkeella
+
+    // Voitto diagonaalilla
+
+    return false;
 }
 
 // Funktio lisää merkin tauluun pelaajan perusteella
@@ -125,14 +136,15 @@ void add_coordinates(std::string x, std::string y,
                      std::vector< std::vector<char> >& grid,
                      int player_turn){
     if(player_in_turn(player_turn) == "X"){
-        grid.at(std::stoi(x) -1).at(std::stoi(y) - 1) = 'X';
+        grid.at(std::stoi(y) -1).at(std::stoi(x) - 1) = 'X';
     }
     else{
-        grid.at(std::stoi(x) - 1).at(std::stoi(y) - 1) = '0';
+        grid.at(std::stoi(y) - 1).at(std::stoi(x) - 1) = '0';
     }
     print_grid(grid);
 
 }
+
 // Funktio kysyy ja lukee koordinaatit
 void read_coordinates(std::vector< std::vector<char> >& grid){
     std::cout << "Start game:" << std::endl;
@@ -142,6 +154,7 @@ void read_coordinates(std::vector< std::vector<char> >& grid){
     std::string x = "";
     std::string y = "";
 
+    while(!check_for_winner(grid)){
     while(true){
         std::cout << "For " << player_in_turn(player_turn) <<
                      ", enter coordinates: x y> ";
@@ -149,7 +162,8 @@ void read_coordinates(std::vector< std::vector<char> >& grid){
 
         // Tarkistetaan ensin, onko ensimmäinen syöte lopetuskomento
         if(x == "q"){
-            std::cout << "Why on earth you are giving up the game?" << std::endl;
+            std::cout << "Why on earth you are giving up the game?"
+            << std::endl;
             return;
         }
         std::cin >> y;
@@ -161,6 +175,7 @@ void read_coordinates(std::vector< std::vector<char> >& grid){
     }
     add_coordinates(x, y, grid, player_turn);
     ++player_turn;
+    }
 }
 
 
