@@ -121,7 +121,7 @@ bool check_input(std::string x, std::string y,
 }
 
 // Funktio käy läpi ja tarkastaa eri voittotilanteet
-bool check_for_winner(std::vector< std::vector<char> >& grid){
+bool check_for_winner(std::vector< std::vector<char> >& grid, int player_turn){
     size_t count_crosses = 1; // Laskee vierekkäiset ristit
     size_t count_noughts = 1; // Laskee vierekkäiset nollat
 
@@ -129,7 +129,7 @@ bool check_for_winner(std::vector< std::vector<char> >& grid){
         //Voitto rivillä
         for(size_t j = 0; j < (grid.size() - 1); ++j){
             if(grid.at(i).at(j) == grid.at(i).at(j+1) && grid.at(i).at(j) != '.'){
-                if(grid.at(0).at(0) == 'X'){
+                if(grid.at(i).at(j) == 'X'){
                     count_crosses += 1;
                 }
                 else{
@@ -138,7 +138,7 @@ bool check_for_winner(std::vector< std::vector<char> >& grid){
             }
         }
         if(count_noughts == grid.size() || count_crosses == grid.size()){
-            if(grid.at(0).at(0) == 'X'){
+            if(player_in_turn(player_turn + 1) == "X"){
                 std::cout << "Cross won horizontally"<< std::endl;
             }
             else{
@@ -147,12 +147,11 @@ bool check_for_winner(std::vector< std::vector<char> >& grid){
             std::cout << "Game over!" << std::endl;
             return true;
         }
-
         // Voitto sarakkeella
         count_crosses = 1; count_noughts = 1;
         for(size_t k = 0; k < (grid.size() - 1); ++k){
             if(grid.at(k).at(i) == grid.at(k+1).at(i) && grid.at(k).at(i) != '.'){
-                if(grid.at(0).at(0) == 'X'){
+                if(grid.at(k).at(i) == 'X'){
                     count_crosses += 1;
                 }
                 else{
@@ -161,7 +160,7 @@ bool check_for_winner(std::vector< std::vector<char> >& grid){
             }
         }
         if(count_noughts == grid.size() || count_crosses == grid.size()){
-            if(grid.at(0).at(0) == 'X'){
+            if(player_in_turn(player_turn + 1) == "X"){
                 std::cout << "Cross won vertically"<< std::endl;
             }
             else{
@@ -171,31 +170,71 @@ bool check_for_winner(std::vector< std::vector<char> >& grid){
             return true;
         }
         }
-
     // Voitto diagonaalilta
     count_crosses = 1; count_noughts = 1;
     for(size_t m = 0; m < (grid.size()-1); ++m){
         if(grid.at(m).at(m) == grid.at(m+1).at(m+1) && grid.at(m).at(m) != '.'){
-            if(grid.at(0).at(0) == 'X'){
+            if(grid.at(m).at(m) == 'X'){
                  count_crosses += 1;
              }
              else{
                 count_noughts += 1;
              }
             }
-        }
+    }
     if(count_noughts == grid.size() || count_crosses == grid.size()){
-        if(grid.at(0).at(0) == 'X'){
-            std::cout << "Cross won diagonally"<< std::endl;
-         }
-         else{
-            std::cout << "Nought won diagonally"<< std::endl;
-         }
-         std::cout << "Game over!" << std::endl;
-         return true;
+            if(player_in_turn(player_turn + 1) == "X"){
+                std::cout << "Cross won diagonally"<< std::endl;
+             }
+             else{
+                std::cout << "Nought won diagonally"<< std::endl;
+             }
+             std::cout << "Game over!" << std::endl;
+             return true;
+        }
+
+    // Voitto toiselta diagonaalilta
+    count_crosses = 1; count_noughts = 1;
+    for(size_t m = 0; m < (grid.size()-1); ++m){
+        for(size_t n = (grid.size()-1); n > 0; --n){
+            if(grid.at(n).at(m) == grid.at(n-1).at(m+1) && grid.at(n).at(m) != '.'){
+                if(grid.at(n).at(m) == 'X'){
+                     count_crosses += 1;
+                 }
+                 else{
+                    count_noughts += 1;
+                 }
+                }
+            }
+        if(count_noughts == grid.size() || count_crosses == grid.size()){
+            if(player_in_turn(player_turn + 1) == "X"){
+                std::cout << "Cross won diagonally"<< std::endl;
+             }
+             else{
+                std::cout << "Nought won diagonally"<< std::endl;
+             }
+             std::cout << "Game over!" << std::endl;
+             return true;
+        }
     }
     return false;
 }
+
+// Funktio tarkastaa, tulleko pelilauta täyteen
+//bool is_grid_full(std::vector< std::vector<char> >& grid){
+    //Jos ei tule voittoa, eikä pelilautaa laajenneta, peli loppuu
+    /*if(!check_for_winner(grid)){
+        for(size_t i = 0; i < grid.size(); ++i){
+
+            for(size_t j = 0; j < grid.size(); ++j){
+                if(grid.at(i).at(j) == '.'){
+                    return false;
+                }
+            }
+        }
+    }*/
+   // return true;
+//}
 
 
 // Funktio lisää merkin tauluun pelaajan perusteella
@@ -221,7 +260,7 @@ void read_coordinates(std::vector< std::vector<char> >& grid){
     std::string x = "";
     std::string y = "";
 
-    while(!check_for_winner(grid)){
+    while(!check_for_winner(grid, player_turn)){
     while(true){
         std::cout << "For " << player_in_turn(player_turn) <<
                      ", enter coordinates: x y> ";
