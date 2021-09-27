@@ -85,16 +85,33 @@ std::string player_in_turn(int player_turn){
 
 // Funktio laajentaa pelilautaa sallittuun suuntaan
 void expand_board(std::vector< std::vector<char> >& grid,
-                  size_t x, size_t y){
+                  std::string x, std::string y){
 
-    // Laajeneminen alaspäin
-    if(x == (grid.size() + 1) || y == (grid.size() + 1)){
-        size_t n = grid.size();
+    size_t n = grid.size();
+    size_t x1 = stoi(x);
+    size_t y1 = stoi(y);
+
+    // Laajeneminen alaspäin ja oikealle
+    if(x1 == (grid.size() + 1) || y1 == (grid.size() + 1)){
         for(size_t i = 0; i < n ; ++i){
             grid.at(i).push_back('.');
         }
         std::vector<char> vector((n +1), '.');
         grid.push_back(vector);
+    }
+
+    //Laajeneminen ylöspäin ja vasemmalle
+    if((x1 == 0 || y1 == 0)){
+        std::vector< std::vector<char> > empty_grid = {};
+        make_grid(empty_grid, (n+1));
+
+        for(size_t i = 1; i <= n; ++i){
+            for(size_t j = 1; j <= n; ++j){
+                empty_grid.at(i).at(j) = grid.at(i-1).at(j-1);
+            }
+        }
+
+        grid = empty_grid;
     }
 }
 
@@ -128,7 +145,8 @@ bool check_input(std::string x, std::string y,
 
     //Tarkistetaan, pitääkö pelilautaa laajentaa
     if(x2 == (grid.size() + 1) || y2 == (grid.size() + 1)|| x2 == 0 || y2 == 0){
-        expand_board(grid, x2, y2);
+        expand_board(grid, x, y);
+        return true;
     }
 
     // Peliruudun pitää olla vapaana
@@ -263,11 +281,23 @@ void add_coordinates(std::string x, std::string y,
                      int player_turn){
 
     if(player_in_turn(player_turn) == "X"){
-        grid.at(std::stoi(y) -1).at(std::stoi(x) - 1) = 'X';
+        if(stoi(x) == 0 || stoi(y) == 0){
+            grid.at(stoi(y)).at(stoi(x)) = 'X';
+        }
+        else{
+            grid.at(std::stoi(y) -1).at(std::stoi(x) - 1) = 'X';
+        }
     }
+
     else{
-        grid.at(std::stoi(y) - 1).at(std::stoi(x) - 1) = '0';
+        if(stoi(x) == 0 || stoi(y) == 0){
+            grid.at(stoi(y)).at(stoi(x)) = '0';
+        }
+        else{
+            grid.at(std::stoi(y) -1).at(std::stoi(x) - 1) = '0';
+        }
     }
+
     print_grid(grid);
 
 }
