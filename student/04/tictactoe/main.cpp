@@ -141,7 +141,7 @@ bool check_input(std::string x, std::string y,
     }
     // Koordinaatit ei voi ylittyä ja/tai alittua samaan aikaan
     if((x1 < 0 and y1 < 0) or
-            (x2 >= (grid.size() + 1) and y2 >= (grid.size() + 1))
+            (x2 > (grid.size() + 1) and y2 > (grid.size() + 1))
             or (x1 <= 0 and y2 >= grid.size()) or
             (y1 <= 0 and x2 >= grid.size())){
         std::cout << "Coordinate outside the board" << std::endl;
@@ -169,6 +169,7 @@ bool check_for_winner(std::vector< std::vector<char> >& grid, int player_turn){
 
     for(size_t i = 0; i < (grid.size() - 1); ++i){
         //Voitto rivillä
+        count_crosses = 1; count_noughts = 1;
         for(size_t j = 0; j < (grid.size() - 1); ++j){
             if(grid.at(i).at(j) == grid.at(i).at(j+1) && grid.at(i).at(j) != '.'){
                 if(grid.at(i).at(j) == 'X'){
