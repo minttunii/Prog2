@@ -85,11 +85,9 @@ std::string player_in_turn(int player_turn){
 
 // Funktio laajentaa pelilautaa sallittuun suuntaan
 void expand_board(std::vector< std::vector<char> >& grid,
-                  std::string x, std::string y){
+                  size_t x1, size_t y1){
 
     size_t n = grid.size();
-    size_t x1 = stoi(x);
-    size_t y1 = stoi(y);
 
     // Laajeneminen alaspäin ja oikealle
     if(x1 == (grid.size() + 1) || y1 == (grid.size() + 1)){
@@ -110,7 +108,6 @@ void expand_board(std::vector< std::vector<char> >& grid,
                 empty_grid.at(i).at(j) = grid.at(i-1).at(j-1);
             }
         }
-
         grid = empty_grid;
     }
 }
@@ -120,9 +117,17 @@ bool check_input(std::string x, std::string y,
                  std::vector< std::vector<char> >& grid){
 
     // Koordinaattien pitää olla lukuja
-    if(! std::isdigit(x.at(0)) or ! std::isdigit(y.at(0))){
-        std::cout << "Coordinate outside the board" << std::endl;
-        return false;
+    for(char i: x){
+        if(! std::isdigit(i)){
+            std::cout << "Coordinate outside the board" << std::endl;
+            return false;
+        }
+    }
+    for(char i: y){
+        if(! std::isdigit(i)){
+            std::cout << "Coordinate outside the board" << std::endl;
+            return false;
+        }
     }
 
     // Koordinaattien pitää olla pelilaudalla, tai mennä vain yhdellä ali/yli
@@ -145,7 +150,7 @@ bool check_input(std::string x, std::string y,
 
     //Tarkistetaan, pitääkö pelilautaa laajentaa
     if(x2 == (grid.size() + 1) || y2 == (grid.size() + 1)|| x2 == 0 || y2 == 0){
-        expand_board(grid, x, y);
+        expand_board(grid, x2, y2);
         return true;
     }
 
@@ -281,6 +286,7 @@ void add_coordinates(std::string x, std::string y,
                      int player_turn){
 
     if(player_in_turn(player_turn) == "X"){
+        // Jos pelilautaa laajennettiin ylöspäin ja vasemmalle
         if(stoi(x) == 0 || stoi(y) == 0){
             grid.at(stoi(y)).at(stoi(x)) = 'X';
         }
@@ -297,9 +303,7 @@ void add_coordinates(std::string x, std::string y,
             grid.at(std::stoi(y) -1).at(std::stoi(x) - 1) = '0';
         }
     }
-
     print_grid(grid);
-
 }
 
 // Funktio kysyy ja lukee koordinaatit
