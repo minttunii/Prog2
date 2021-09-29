@@ -16,13 +16,19 @@ int main()
         << std::endl;
         return EXIT_FAILURE;
     }
+
     int row_number = 1;
     std:: string row = "";
+    std::ofstream newfile(output_file);
     while(getline(file, row)){
-        std::cout <<row_number <<" "<< row << std::endl;
+
+        newfile <<row_number <<" "<< row << std::endl;
 
         ++row_number;
     }
+
+    file.close();
+    newfile.close();
 
 
 
