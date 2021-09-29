@@ -3,14 +3,17 @@
 
 int main()
 {
-    std::string file_name = "";
+    std::string name = "";
+    std::string input_file = "";
     std::cout <<"Input file: ";
-    getline(std::cin, file_name);
+    getline(std::cin, name, '.');
+    input_file = name + ".input";
 
-    std::string output_file = "a.output";
+
+    std::string output_file = name + ".output";
     std::cout << "Output file: " << output_file << std::endl;
 
-    std::ifstream file(file_name);
+    std::ifstream file(input_file);
     if(not file){
         std::cout <<"Error! The file not_a_file.input cannot be opened."
         << std::endl;
@@ -23,6 +26,7 @@ int main()
     while(getline(file, row)){
 
         newfile <<row_number <<" "<< row << std::endl;
+        newfile << std::endl;
 
         ++row_number;
     }
