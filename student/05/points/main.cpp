@@ -38,6 +38,7 @@ int main()
 
     }
 
+    std::cout << "Final scores:" << std::endl;
     for(auto& pair: player_scores){
         std::cout<< pair.first << ": " << pair.second << std::endl;
     }
