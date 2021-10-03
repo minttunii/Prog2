@@ -1,40 +1,38 @@
 #include <iostream>
 #include <fstream>
 
+
 int main()
 {
-    std::string name = "";
-    std::string input_file = "";
-    std::string output_file = "";
-    std::cout <<"Input file: ";
-    getline(std::cin, input_file);
-    name = input_file.at(0);
+    std::string file = "";
+    std::cout << "Input file: ";
+    std::cin >> file;
 
-    std::ifstream file(input_file);
-    if(not file){
-        std::cout << "Output file: " << "a.output" << std::endl;
-        std::cout <<"Error! The file " << input_file << " cannot be opened."
+    std::ifstream file_in(file);
+    std::string output_file = file.substr(0, 1) + ".output";
+    std::ofstream file_out(output_file);
+
+
+    if(! file_in || ! file_out){
+        std::cout << "Output file: "<< "a.output" << std::endl;
+        std::cout << "Error! The file " << file << " cannot be opened."
         << std::endl;
         return EXIT_FAILURE;
     }
-    else{
-        output_file = name + ".output";
-        std::cout << "Output file: " << output_file << std::endl;
-    }
 
+    std::cout << "Output file: "<< output_file << std::endl;
     int row_number = 1;
-    std:: string row = "";
-    std::ofstream newfile(output_file);
-    while(getline(file, row)){
+    std::string row = "";
 
-        newfile <<row_number <<" "<< row << std::endl;
+    while(getline(file_in, row)){
+
+        file_out << row_number << " " << row << std::endl;
 
         ++row_number;
     }
 
-    file.close();
-    newfile.close();
-
+    file_in.close();
+    file_out.close();
 
 
     return EXIT_SUCCESS;
