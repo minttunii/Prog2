@@ -39,7 +39,7 @@ int main()
     }
 
     for(auto& pair: player_scores){
-        std::cout<< pair.first << " : " << pair.second << std::endl;
+        std::cout<< pair.first << ": " << pair.second << std::endl;
     }
 
 
