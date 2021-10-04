@@ -8,12 +8,10 @@ int main()
     std::cout << "Input file: ";
     std::cin >> file;
 
-    std::ifstream file_in(file);
+    std::fstream file_in(file);
     std::string output_file = file.substr(0, 1) + ".output";
-    std::ofstream file_out(output_file);
 
-
-    if(! file_in || ! file_out){
+    if(! file_in){
         std::cout << "Output file: "<< "a.output" << std::endl;
         std::cout << "Error! The file " << file << " cannot be opened."
         << std::endl;
@@ -24,11 +22,18 @@ int main()
     int row_number = 1;
     std::string row = "";
 
-    while(getline(file_in, row)){
+    std::ofstream file_out(output_file);
 
-        file_out << row_number << " " << row << std::endl;
+    if(file_out){
+        while(getline(file_in, row)){
 
-        ++row_number;
+            file_out << row_number << " " << row << std::endl;
+
+            ++row_number;
+        }
+    }
+    else{
+        return EXIT_FAILURE;
     }
 
     file_in.close();
