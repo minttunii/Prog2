@@ -19,6 +19,9 @@ bool palindrome_recursive(std::string s)
       if(s.front() == s.back()){
           return true;
       }
+      else{
+          return false;
+      }
   }
 
   else{
