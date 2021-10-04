@@ -12,13 +12,13 @@ int main()
     std::string output_file = file.substr(0, 1) + ".output";
 
     if(! file_in){
-        std::cout << "Output file: "<< "a.output" << std::endl;
+        std::cout << "Output file: " << "a.output" << std::endl;
         std::cout << "Error! The file " << file << " cannot be opened."
         << std::endl;
         return EXIT_FAILURE;
     }
 
-    std::cout << "Output file: "<< output_file << std::endl;
+    std::cout << "Output file: ";
     int row_number = 1;
     std::string row = "";
 
