@@ -26,13 +26,13 @@ bool palindrome_recursive(std::string s)
 
   else{
       if(s.front() == s.back()){
-            palindrome_recursive(s.substr(1, s.size()-2));
+            return palindrome_recursive(s.substr(1, s.size()-2));
       }
       else{
           return false;
       }
   }
-  return true;
+
 }
 
 // Do not modify rest of the code, or the automated testing won't work.
