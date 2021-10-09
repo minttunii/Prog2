@@ -50,7 +50,18 @@ void print_command(const OrganizationMap& underlings_by_name,
     for(const auto& underling : underlings_by_name.at(boss_id)){
         print_command(underlings_by_name, underling, current_depth + 1);
     }
+}
 
+unsigned count_command(const OrganizationMap& underlings_by_name,
+                       const std::string& boss_id){
+
+    const auto& underlings = underlings_by_name.at(boss_id);
+    unsigned underlings_count = underlings.size();
+
+    for(const auto& underling : underlings){
+        underlings_count += count_command(underlings_by_name, underling);
+    }
+    return underlings_count;
 }
 
 int main()
@@ -92,7 +103,7 @@ int main()
             }
             std::string id = parts.at(1);
 
-            // TODO: Implement the command here!
+            std::cout << count_command(underlings_by_name, id) << std::endl;
 
         } else if(command == "D" or command == "d"){
             if(parts.size() != 2){
