@@ -64,6 +64,17 @@ unsigned count_command(const OrganizationMap& underlings_by_name,
     return underlings_count;
 }
 
+unsigned depth_command(const OrganizationMap& underlings_by_name,
+                       const std::string& boss_id){
+
+    unsigned max_subtree_depth = 0;
+    for(const auto& underling : underlings_by_name.at(boss_id)){
+        auto depth = depth_command(underlings_by_name, underling);
+        max_subtree_depth = std::max(max_subtree_depth, depth);
+    }
+    return max_subtree_depth + 1;
+}
+
 int main()
 {
     OrganizationMap underlings_by_name;
@@ -112,7 +123,7 @@ int main()
             }
             std::string id = parts.at(1);
 
-            // TODO: Implement the command here!
+            std::cout << depth_command(underlings_by_name, id) << std::endl;
 
         } else if(command == "Q" or command == "q"){
            return EXIT_SUCCESS;
