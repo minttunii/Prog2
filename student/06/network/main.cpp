@@ -42,6 +42,17 @@ void store_command(OrganizationMap& underlings_by_name,
 
 }
 
+void print_command(const OrganizationMap& underlings_by_name,
+                   const std::string& boss_id,
+                   unsigned current_depth = 0){
+
+    std::cout << std::string(current_depth * 2, '.') << boss_id << std::endl;
+    for(const auto& underling : underlings_by_name.at(boss_id)){
+        print_command(underlings_by_name, underling, current_depth + 1);
+    }
+
+}
+
 int main()
 {
     OrganizationMap underlings_by_name;
@@ -72,7 +83,7 @@ int main()
             }
             std::string id = parts.at(1);
 
-            // TODO: Implement the command here!
+            print_command(underlings_by_name, id);
 
         } else if(command == "C" or command == "c"){
             if(parts.size() != 2){
