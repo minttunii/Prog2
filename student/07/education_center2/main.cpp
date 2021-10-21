@@ -29,6 +29,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <algorithm>
 
 const int COURSE_FULL = 50;
 const char CSV_FIELD_DELIMITER = ';';
@@ -272,6 +273,13 @@ bool is_course_in_location(std::vector<std::string>& parameters,
     return true;
 }
 
+// Vertailuoperaattori kahdelle Course structille nimen perusteella
+bool operator< (const Course& a, const Course& b){
+    return a.name < b.name;
+}
+
+// Funkiot ottaa parametrina kurssikeskuksen tiedot ja tulostaa teemat
+// järjestyksessä.
 void themes_command(CourseCenterMap& courses_by_theme){
     auto it = courses_by_theme.begin();
     ++it;
@@ -280,8 +288,12 @@ void themes_command(CourseCenterMap& courses_by_theme){
     }
 }
 
+// Funktio ottaa parametrina funktion komentoparametrit sekä kurssikeskuksen
+// tiedot. Alussa on virheentarkastus ja oikeila syötteilä tulostetaan teeman
+// kurssit ja osallistujamäärä annetulta paikkakunnalta järjestyksessä.
 bool courses_command(std::vector<std::string>& parameters,
                      CourseCenterMap& courses_by_theme){
+
     if(!validate_location(parameters, courses_by_theme) &&
             !validate_theme(parameters, courses_by_theme)){
         std::cout << "Error: unknown theme" << std::endl;
@@ -295,6 +307,22 @@ bool courses_command(std::vector<std::string>& parameters,
             !is_course_in_location(parameters, courses_by_theme)){
         std::cout << "Error: unknown location" << std::endl;
         return true;
+    }
+
+    std::string location = parameters.at(0);
+    std::string theme = parameters.at(1);
+    sort(courses_by_theme[theme].begin(), courses_by_theme[theme].end(), operator<);
+
+    for(const Course& course : courses_by_theme[theme]){
+        if(course.location == location){
+            if(course.enrollments == COURSE_FULL){
+                std::cout<< course.name << " --- " << "full" << std::endl;
+            }
+            else{
+            std::cout<< course.name << " --- " << course.enrollments
+                     << " enrollments" << std::endl;
+            }
+        }
     }
     return true;
 }
