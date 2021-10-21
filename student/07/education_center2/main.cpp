@@ -272,8 +272,12 @@ bool is_course_in_location(std::vector<std::string>& parameters,
     return true;
 }
 
-void themes_command(std::vector<std::string>& parameters,
-                    CourseCenterMap& courses_by_theme){
+void themes_command(CourseCenterMap& courses_by_theme){
+    auto it = courses_by_theme.begin();
+    ++it;
+    for(; it != courses_by_theme.end(); ++it){
+        std::cout << it->first << std::endl;
+    }
 }
 
 bool courses_command(std::vector<std::string>& parameters,
@@ -338,7 +342,7 @@ bool get_command(std::string& command, std::vector<std::string>& parameters,
         return false;
     }
     else if(command == "themes" || command == "THEMES"){
-        themes_command(parameters, courses_by_theme);
+        themes_command(courses_by_theme);
     }
     else if(command == "courses" || command == "COURSES"){
         courses_command(parameters, courses_by_theme);
