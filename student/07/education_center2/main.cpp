@@ -32,12 +32,15 @@
 
 const int COURSE_FULL = 50;
 const char CSV_FIELD_DELIMITER = ';';
+const char INPUT_LINE_DELIMITER = ' ';
 
 struct Course {
     std::string name;
     std::string location;
     int enrollments;
 };
+
+using CourseCenterMap = std::map<std::string, std::vector<Course>>;
 
 // Jakaa annetun merkkijonon str annetun merkin delimiter erottelemiin osiin
 // ja palauttaa osat vektorissa.
@@ -116,8 +119,7 @@ bool validate_no_empty_fields(const std::vector<std::string>& fields){
 // Funktio ottaa parametrina vektorin tiedoston riveistä sekä tietorakenteen,
 //johon tieto talletetaan. Funktio palauttaa totuusarvon.
 bool parse_input_lines(const std::vector<std::string>& lines,
-                       std::map<std::string, std::vector<Course>>&
-                       courses_by_theme){
+                       CourseCenterMap& courses_by_theme){
 
     for(const std::string& line : lines){
         std::vector<std::string> fields
@@ -161,16 +163,101 @@ bool parse_input_lines(const std::vector<std::string>& lines,
         }
 
         courses_under_theme.push_back(new_course);
-        std::cout << theme << std::endl
-        << new_course.name << std::endl
-        << new_course.location << std::endl
-        << new_course.enrollments <<std::endl<<std::endl;
     }
     return true;
 }
 
-int main()
-{
+bool validate_parameter_count(std::vector<std::string>& parameters,
+                              std::string& command){
+    if(command == "courses" || command == "COURSES"){
+        if(parameters.size() != 2){
+            std::cout <<"Error: error in command "<< command << std::endl;
+            return false;
+        }
+    }
+    else if(command == "courses_in_theme" || command == "COURSES_IN_THEME"
+            || command == "courses_in_location" || command == "COURSES_IN_LOCATION"
+            || command == "cancel" || command == "CANCEL"){
+        if(parameters.size() != 1){
+            std::cout <<"Error: error in command "<< command << std::endl;
+            return false;
+        }
+    }
+    return true;
+}
+
+void themes_command(std::vector<std::string>& parameters,
+                    CourseCenterMap& courses_by_theme){
+    return;
+}
+
+void courses_command(std::vector<std::string>& parameters,
+                     CourseCenterMap& courses_by_theme){
+    return;
+}
+
+void available_command(std::vector<std::string>& parameters,
+                       CourseCenterMap& courses_by_theme){
+    return;
+}
+
+void courses_in_theme_command(std::vector<std::string>& parameters,
+                              CourseCenterMap& courses_by_theme){
+    return;
+}
+
+void courses_in_location_command(std::vector<std::string>& parameters,
+                                 CourseCenterMap& courses_by_theme){
+    return;
+}
+
+void favorite_theme_command(std::vector<std::string>& parameters,
+                            CourseCenterMap& courses_by_theme){
+    return;
+}
+
+void cancel_command(std::vector<std::string>& parameters,
+                    CourseCenterMap& courses_by_theme){
+    return;
+}
+
+bool get_command(std::string& command, std::vector<std::string>& parameters,
+                 CourseCenterMap& courses_by_theme){
+    if(!validate_parameter_count(parameters, command)){
+        return true;
+    }
+    if(command == "quit" || command == "QUIT"){
+        return false;
+    }
+    else if(command == "themes" || command == "THEMES"){
+        themes_command(parameters, courses_by_theme);
+    }
+    else if(command == "courses" || command == "COURSES"){
+        courses_command(parameters, courses_by_theme);
+    }
+    else if(command == "available" || command == "AVAILABLE"){
+        available_command(parameters, courses_by_theme);
+    }
+    else if(command == "courses_in_theme" || command == "COURSES_IN_THEME"){
+        courses_in_theme_command(parameters, courses_by_theme);
+    }
+    else if(command == "courses_in_location" || command == "COURSES_IN_LOCATION"){
+        courses_in_location_command(parameters, courses_by_theme);
+    }
+    else if(command == "favorite_theme" || command == "FAVORITE_THEME"){
+        favorite_theme_command(parameters, courses_by_theme);
+    }
+    else if(command == "cancel" || command == "CANCEL"){
+        cancel_command(parameters, courses_by_theme);
+    }
+    else{
+        std::cout <<"Error: Unknown command: "<< command <<std::endl;
+        return false;
+    }
+    return true;
+}
+
+int main(){
     std::string input_filepath = "";
     std::cout << "Input file: ";
     std::getline(std::cin, input_filepath);
@@ -181,12 +268,27 @@ int main()
         return EXIT_FAILURE;
     }
 
-    std::map<std::string, std::vector<Course>> courses_by_theme = {};
+    CourseCenterMap courses_by_theme = {};
     if(!parse_input_lines(input_file_lines, courses_by_theme)){
        std::cerr << "Error: empty field" << std::endl;
        return EXIT_FAILURE;
     }
 
+    std::string input_line ="";
+    while(true){
+    std::cout <<"> ";
+    std::getline(std::cin, input_line);
+
+    std::vector<std::string> input_parts
+            = split_ignoring_quoted_delim(input_line, INPUT_LINE_DELIMITER);
+    std::string command = input_parts.at(0);
+    input_parts.erase(input_parts.begin());
+    std::vector<std::string> parameters = input_parts;
+
+    if(!get_command(command, parameters, courses_by_theme)){
+            return EXIT_FAILURE;
+    }
+    }
     return EXIT_SUCCESS;
 }
 
