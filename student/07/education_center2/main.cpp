@@ -274,8 +274,15 @@ bool is_course_in_location(std::vector<std::string>& parameters,
 }
 
 // Vertailuoperaattori kahdelle Course structille nimen perusteella
-bool operator< (const Course& a, const Course& b){
+bool compare_by_name (const Course& a, const Course& b){
     return a.name < b.name;
+}
+
+bool compare_by_location_by_name (const Course& a, const Course& b){
+    if(a.location != b.location){
+        return a.location < b.location;
+    }
+    return a.name< b.name;
 }
 
 // Funkiot ottaa parametrina kurssikeskuksen tiedot ja tulostaa teemat
@@ -311,7 +318,8 @@ bool courses_command(std::vector<std::string>& parameters,
 
     std::string location = parameters.at(0);
     std::string theme = parameters.at(1);
-    sort(courses_by_theme[theme].begin(), courses_by_theme[theme].end(), operator<);
+    sort(courses_by_theme[theme].begin(), courses_by_theme[theme].end(),
+         compare_by_name);
 
     for(const Course& course : courses_by_theme[theme]){
         if(course.location == location){
@@ -327,8 +335,18 @@ bool courses_command(std::vector<std::string>& parameters,
     return true;
 }
 
-void available_command(std::vector<std::string>& parameters,
-                       CourseCenterMap& courses_by_theme){
+// Funkitio ottaa parametrina kurssikeskuksen tiedot, ja tulostaa kurssit, jotka
+// eivät ole täynnä teeman, sijainnin ja nimen perusteella järjestyksessä.
+void available_command(CourseCenterMap& courses_by_theme){
+    for(auto& pair : courses_by_theme){
+        sort(pair.second.begin(), pair.second.end(), compare_by_location_by_name);
+        for(const Course& course : pair.second){
+            if(course.enrollments != COURSE_FULL){
+                std::cout<< pair.first << " : ";
+                std::cout << course.location << " : " << course.name << std::endl;
+            }
+        }
+    }
 }
 
 void courses_in_theme_command(std::vector<std::string>& parameters,
@@ -376,7 +394,7 @@ bool get_command(std::string& command, std::vector<std::string>& parameters,
         courses_command(parameters, courses_by_theme);
     }
     else if(command == "available" || command == "AVAILABLE"){
-        available_command(parameters, courses_by_theme);
+        available_command(courses_by_theme);
     }
     else if(command == "courses_in_theme" || command == "COURSES_IN_THEME"){
         courses_in_theme_command(parameters, courses_by_theme);
