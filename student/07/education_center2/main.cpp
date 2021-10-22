@@ -273,16 +273,22 @@ bool is_course_in_location(std::vector<std::string>& parameters,
     return true;
 }
 
-// Vertailuoperaattori kahdelle Course structille nimen perusteella
+// Vertailufunktio Course structeille nimen perusteella.
 bool compare_by_name (const Course& a, const Course& b){
     return a.name < b.name;
 }
 
+// Vertailufunkio Course structeille ensin sijainnen ja sitten nimen perusteella.
 bool compare_by_location_by_name (const Course& a, const Course& b){
     if(a.location != b.location){
         return a.location < b.location;
     }
     return a.name< b.name;
+}
+
+// Vertailufunktio Course structeille sijainnin perusteella.
+bool compare_by_location (const Course& a, const Course& b){
+    return a.location < b.location;
 }
 
 // Funkiot ottaa parametrina kurssikeskuksen tiedot ja tulostaa teemat
@@ -338,6 +344,7 @@ bool courses_command(std::vector<std::string>& parameters,
 // Funkitio ottaa parametrina kurssikeskuksen tiedot, ja tulostaa kurssit, jotka
 // eivät ole täynnä teeman, sijainnin ja nimen perusteella järjestyksessä.
 void available_command(CourseCenterMap& courses_by_theme){
+
     for(auto& pair : courses_by_theme){
         sort(pair.second.begin(), pair.second.end(), compare_by_location_by_name);
         for(const Course& course : pair.second){
@@ -349,16 +356,26 @@ void available_command(CourseCenterMap& courses_by_theme){
     }
 }
 
+// Funktio ottaa parametrina komennon parametrit ja kurssikeskuksen tiedot.
+// Funktio tulostaa kaikki teeman olevat kurssit paikan mukaan järjestyksessä.
 void courses_in_theme_command(std::vector<std::string>& parameters,
                               CourseCenterMap& courses_by_theme){
 
     if(!validate_theme(parameters, courses_by_theme)){
         std::cout << "Error: unknown theme" << std::endl;
     }
+
+    std::string theme = parameters.at(0);
+    sort(courses_by_theme[theme].begin(), courses_by_theme[theme].end(),
+         compare_by_location);
+    for(const Course& course : courses_by_theme[theme]){
+        std::cout << course.location << " : " << course.name << std::endl;
+    }
 }
 
 void courses_in_location_command(std::vector<std::string>& parameters,
                                  CourseCenterMap& courses_by_theme){
+
     if(!validate_location(parameters, courses_by_theme)){
         std::cout << "Error: unknown location" << std::endl;
     }
