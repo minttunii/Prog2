@@ -399,8 +399,48 @@ void courses_in_location_command(std::vector<std::string>& parameters,
     }
 }
 
-void favorite_theme_command(std::vector<std::string>& parameters,
-                            CourseCenterMap& courses_by_theme){
+void favorite_theme_command(CourseCenterMap& courses_by_theme){
+
+    std::map< std::string, int> enrollments_by_theme = {};
+    auto it = courses_by_theme.begin();
+    for(; it != courses_by_theme.end(); ++it){
+        enrollments_by_theme.try_emplace({});
+        int enrollments = 0;
+        for(const Course& course : it->second){
+            enrollments += course.enrollments;
+        }
+        enrollments_by_theme[it->first] = enrollments;
+    }
+
+    if(enrollments_by_theme.empty()){
+        std::cout << "No enrollments" << std::endl;
+    }
+
+    /*for(const auto& pair : enrollments_by_theme){
+        std::cout << pair.first << " : " << pair.second << std::endl;
+    }*/
+
+    std::map< std::string, int> favorite_themes = {};
+    int max_enrollments = 0;
+    std::string current_favorite = "";
+
+    for(const auto& pair : enrollments_by_theme){
+        if(pair.second > max_enrollments){
+            max_enrollments = pair.second;
+            favorite_themes[pair.first] = max_enrollments;
+            favorite_themes.erase(current_favorite);
+            current_favorite = pair.first;
+        }
+        else if(pair.second == max_enrollments){
+            favorite_themes[pair.first] = max_enrollments;
+        }
+    }
+
+    std::cout << favorite_themes.begin()->second <<
+                 " enrollments in themes" << std::endl;
+    for(const auto& pair : favorite_themes){
+        std::cout << "--- " << pair.first << std::endl;
+    }
 }
 
 void cancel_command(std::vector<std::string>& parameters,
@@ -438,7 +478,7 @@ bool get_command(std::string& command, std::vector<std::string>& parameters,
         courses_in_location_command(parameters, courses_by_theme);
     }
     else if(command == "favorite_theme" || command == "FAVORITE_THEME"){
-        favorite_theme_command(parameters, courses_by_theme);
+        favorite_theme_command(courses_by_theme);
     }
     else if(command == "cancel" || command == "CANCEL"){
         cancel_command(parameters, courses_by_theme);
