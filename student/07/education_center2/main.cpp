@@ -373,11 +373,29 @@ void courses_in_theme_command(std::vector<std::string>& parameters,
     }
 }
 
+// Funktio ottaa parametrina komennon parametrit ja kurssikeskuksen tiedot.
+// Funktio tulostaa kaikki paikkakunnan kurssit aakkosjärjestyksessä.
 void courses_in_location_command(std::vector<std::string>& parameters,
                                  CourseCenterMap& courses_by_theme){
 
     if(!validate_location(parameters, courses_by_theme)){
         std::cout << "Error: unknown location" << std::endl;
+    }
+
+    std::string location = parameters.at(0);
+    std::vector<std::string> courses_under_location = {};
+    // Talletetaan sijainnin kurssit ensin vektoriin
+    for(const auto& pair : courses_by_theme){
+        for(const Course& course : pair.second){
+            if(course.location == location){
+                courses_under_location.push_back(course.name);
+            }
+        }
+    }
+
+    sort(courses_under_location.begin(), courses_under_location.end());
+    for(const std::string& course_name : courses_under_location){
+        std::cout << course_name << std::endl;
     }
 }
 
