@@ -13,12 +13,10 @@
  *
  *
  * Ohjelman kirjoittaja
- * Nimi: Minttu Niirane
+ * Nimi: Minttu Niiranen
  * Opiskelijanumero: 291834
  * Käyttäjätunnus: pqmini
  * E-Mail: minttu.niiranen@tuni.fi
- *
- * Huomioita ohjelmasta ja sen toteutuksesta:
  *
  * */
 
@@ -399,8 +397,9 @@ void courses_in_location_command(std::vector<std::string>& parameters,
     }
 }
 
+// Funktio ottaa parametrina kurssikeskuksen tiedot ja selvittää suosituimman/
+// suosituimmat teemat osallistujamäärän perusteella.
 void favorite_theme_command(CourseCenterMap& courses_by_theme){
-
     std::map< std::string, int> enrollments_by_theme = {};
     auto it = courses_by_theme.begin();
     for(; it != courses_by_theme.end(); ++it){
@@ -416,14 +415,9 @@ void favorite_theme_command(CourseCenterMap& courses_by_theme){
         std::cout << "No enrollments" << std::endl;
     }
 
-    /*for(const auto& pair : enrollments_by_theme){
-        std::cout << pair.first << " : " << pair.second << std::endl;
-    }*/
-
     std::map< std::string, int> favorite_themes = {};
     int max_enrollments = 0;
     std::string current_favorite = "";
-
     for(const auto& pair : enrollments_by_theme){
         if(pair.second > max_enrollments){
             max_enrollments = pair.second;
@@ -443,12 +437,35 @@ void favorite_theme_command(CourseCenterMap& courses_by_theme){
     }
 }
 
+// Funktio ottaa parametrina komennon parametrit ja kurssikeskuksen tiedot.
+// Funktio poistaa annetun kurssin kaikki toteutukset.
 void cancel_command(std::vector<std::string>& parameters,
                     CourseCenterMap& courses_by_theme){
 
     if(!validate_course(parameters, courses_by_theme)){
        std::cout << "Error: unknown course" << std::endl;
     }
+
+    std::string course_name = parameters.at(0);
+    std::vector<std::vector<Course>::iterator> courses_to_delete = {};
+    auto it = courses_by_theme.begin();
+    for(; it!= courses_by_theme.end(); ++it){
+        auto iter = it->second.begin();
+        for(; iter != it->second.end(); ++iter){
+            if(iter->name == course_name){
+                courses_to_delete.push_back(iter);
+            }
+        }
+        if(courses_to_delete.size() > 0){
+            break;
+        }
+    }
+
+    for(size_t i = 0; i < courses_to_delete.size(); ++i){
+    courses_by_theme[it->first].erase(courses_to_delete.at(i));
+    }
+    std::cout << course_name << " cancelled in all locations" << std::endl;
+
 }
 
 // Funktio ottaa parametrina komennon ja sen parametrit sekä kurssikeskuksen
