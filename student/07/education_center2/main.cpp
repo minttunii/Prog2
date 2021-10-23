@@ -535,7 +535,7 @@ int main(){
     std::vector<std::string> parameters = input_parts;
 
     if(!get_command(command, parameters, courses_by_theme)){
-            return EXIT_FAILURE;
+            return EXIT_SUCCESS;
     }
     }
     return EXIT_SUCCESS;
