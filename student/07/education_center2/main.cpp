@@ -292,6 +292,10 @@ bool compare_by_location (const Course& a, const Course& b){
 // Funkiot ottaa parametrina kurssikeskuksen tiedot ja tulostaa teemat
 // järjestyksessä.
 void themes_command(CourseCenterMap& courses_by_theme){
+    if(courses_by_theme.empty()){
+        return;
+    }
+
     auto it = courses_by_theme.begin();
     ++it;
     for(; it != courses_by_theme.end(); ++it){
@@ -339,7 +343,7 @@ bool courses_command(std::vector<std::string>& parameters,
     return true;
 }
 
-// Funkitio ottaa parametrina kurssikeskuksen tiedot, ja tulostaa kurssit, jotka
+// Funktio ottaa parametrina kurssikeskuksen tiedot, ja tulostaa kurssit, jotka
 // eivät ole täynnä teeman, sijainnin ja nimen perusteella järjestyksessä.
 void available_command(CourseCenterMap& courses_by_theme){
 
@@ -361,6 +365,7 @@ void courses_in_theme_command(std::vector<std::string>& parameters,
 
     if(!validate_theme(parameters, courses_by_theme)){
         std::cout << "Error: unknown theme" << std::endl;
+        return;
     }
 
     std::string theme = parameters.at(0);
@@ -378,6 +383,7 @@ void courses_in_location_command(std::vector<std::string>& parameters,
 
     if(!validate_location(parameters, courses_by_theme)){
         std::cout << "Error: unknown location" << std::endl;
+        return;
     }
 
     std::string location = parameters.at(0);
@@ -399,7 +405,12 @@ void courses_in_location_command(std::vector<std::string>& parameters,
 
 // Funktio ottaa parametrina kurssikeskuksen tiedot ja selvittää suosituimman/
 // suosituimmat teemat osallistujamäärän perusteella.
-void favorite_theme_command(CourseCenterMap& courses_by_theme){
+bool favorite_theme_command(CourseCenterMap& courses_by_theme){
+    if(courses_by_theme.empty()){
+        std::cout << "No enrollments" << std::endl;
+        return true;
+    }
+
     std::map< std::string, int> enrollments_by_theme = {};
     auto it = courses_by_theme.begin();
     for(; it != courses_by_theme.end(); ++it){
@@ -409,10 +420,6 @@ void favorite_theme_command(CourseCenterMap& courses_by_theme){
             enrollments += course.enrollments;
         }
         enrollments_by_theme[it->first] = enrollments;
-    }
-
-    if(enrollments_by_theme.empty()){
-        std::cout << "No enrollments" << std::endl;
     }
 
     std::map< std::string, int> favorite_themes = {};
@@ -435,6 +442,7 @@ void favorite_theme_command(CourseCenterMap& courses_by_theme){
     for(const auto& pair : favorite_themes){
         std::cout << "--- " << pair.first << std::endl;
     }
+    return true;
 }
 
 // Funktio ottaa parametrina komennon parametrit ja kurssikeskuksen tiedot.
@@ -444,6 +452,7 @@ void cancel_command(std::vector<std::string>& parameters,
 
     if(!validate_course(parameters, courses_by_theme)){
        std::cout << "Error: unknown course" << std::endl;
+       return;
     }
 
     std::string course_name = parameters.at(0);
