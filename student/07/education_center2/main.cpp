@@ -271,24 +271,6 @@ bool is_course_in_location(std::vector<std::string>& parameters,
     return true;
 }
 
-// Vertailufunktio Course structeille nimen perusteella.
-bool compare_by_name (const Course& a, const Course& b){
-    return a.name < b.name;
-}
-
-// Vertailufunkio Course structeille ensin sijainnen ja sitten nimen perusteella.
-bool compare_by_location_by_name (const Course& a, const Course& b){
-    if(a.location != b.location){
-        return a.location < b.location;
-    }
-    return a.name< b.name;
-}
-
-// Vertailufunktio Course structeille sijainnin perusteella.
-bool compare_by_location (const Course& a, const Course& b){
-    return a.location < b.location;
-}
-
 // Funkiot ottaa parametrina kurssikeskuksen tiedot ja tulostaa teemat
 // järjestyksessä.
 void themes_command(CourseCenterMap& courses_by_theme){
@@ -326,18 +308,20 @@ bool courses_command(std::vector<std::string>& parameters,
 
     std::string location = parameters.at(0);
     std::string theme = parameters.at(1);
-    sort(courses_by_theme[theme].begin(), courses_by_theme[theme].end(),
-         compare_by_name);
-
+    std::map<std::string, int> names_and_enrollments = {};
     for(const Course& course : courses_by_theme[theme]){
         if(course.location == location){
-            if(course.enrollments == COURSE_FULL){
-                std::cout<< course.name << " --- " << "full" << std::endl;
-            }
-            else{
-            std::cout<< course.name << " --- " << course.enrollments
+            names_and_enrollments[course.name] = course.enrollments;
+        }
+    }
+
+    for(const auto& pair : names_and_enrollments){
+        if(pair.second == COURSE_FULL){
+            std::cout<< pair.first << " --- " << "full" << std::endl;
+        }
+        else{
+            std::cout<< pair.first << " --- " << pair.second
                      << " enrollments" << std::endl;
-            }
         }
     }
     return true;
@@ -347,14 +331,25 @@ bool courses_command(std::vector<std::string>& parameters,
 // eivät ole täynnä teeman, sijainnin ja nimen perusteella järjestyksessä.
 void available_command(CourseCenterMap& courses_by_theme){
 
-    for(auto& pair : courses_by_theme){
-        sort(pair.second.begin(), pair.second.end(), compare_by_location_by_name);
+    std::map<std::string, std::vector<std::string>> courses_in_locations = {};
+    for(const auto& pair : courses_by_theme){
+        std::string theme = pair.first;
+
         for(const Course& course : pair.second){
             if(course.enrollments != COURSE_FULL){
-                std::cout<< pair.first << " : ";
-                std::cout << course.location << " : " << course.name << std::endl;
+                courses_in_locations.try_emplace({});
+                courses_in_locations[course.location].push_back(course.name);
             }
         }
+        // Tulostetaan teeman sisällä kaikki kurssit
+        for(auto& pair : courses_in_locations){
+            sort(pair.second.begin(), pair.second.end());
+            for(const std::string& name : pair.second){
+                std::cout << theme << " : " << pair.first << " : "
+                << name << std::endl;
+            }
+        }
+        courses_in_locations = {};
     }
 }
 
@@ -369,10 +364,17 @@ void courses_in_theme_command(std::vector<std::string>& parameters,
     }
 
     std::string theme = parameters.at(0);
-    sort(courses_by_theme[theme].begin(), courses_by_theme[theme].end(),
-         compare_by_location);
+    std::map<std::string, std::vector<std::string>> locations_and_names = {};
     for(const Course& course : courses_by_theme[theme]){
-        std::cout << course.location << " : " << course.name << std::endl;
+        locations_and_names.try_emplace({});
+        locations_and_names[course.location].push_back(course.name);
+    }
+
+    for(const auto& pair: locations_and_names){
+        for(const std::string& name : pair.second){
+            std::cout << pair.first << " : ";
+            std::cout << name << std::endl;
+        }
     }
 }
 
