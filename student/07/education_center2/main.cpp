@@ -458,25 +458,19 @@ void cancel_command(std::vector<std::string>& parameters,
     }
 
     std::string course_name = parameters.at(0);
-    std::vector<std::vector<Course>::iterator> courses_to_delete = {};
     auto it = courses_by_theme.begin();
     for(; it!= courses_by_theme.end(); ++it){
         auto iter = it->second.begin();
-        for(; iter != it->second.end(); ++iter){
+        for(; iter != it->second.end();){
             if(iter->name == course_name){
-                courses_to_delete.push_back(iter);
+                courses_by_theme[it->first].erase(iter);
+            }
+            else{
+                ++iter;
             }
         }
-        if(courses_to_delete.size() > 0){
-            break;
-        }
-    }
-
-    for(size_t i = 0; i < courses_to_delete.size(); ++i){
-    courses_by_theme[it->first].erase(courses_to_delete.at(i));
     }
     std::cout << course_name << " cancelled in all locations" << std::endl;
-
 }
 
 // Funktio ottaa parametrina komennon ja sen parametrit sekä kurssikeskuksen
