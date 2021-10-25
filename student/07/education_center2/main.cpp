@@ -9,7 +9,7 @@
  * joista tiedetään kurssin nimi, paikkakunta sekä osallistujien määrä. Tiedot
  * luetaan tiedostosta sopivaan tietorakenteeseen, jos virheitä ei ilmene.
  * Käyttäjä voi syöttää ohjelmalle eri komentoja, joilla saa kurssikeskuksesta
- * tietoja, kursseja voidaan myös poistaa.
+ * tietoja, kursseja voidaan myös poistaa kurssikeskuksen tiedoista.
  *
  *
  * Ohjelman kirjoittaja
@@ -157,6 +157,7 @@ bool parse_input_lines(const std::vector<std::string>& lines,
             }
         }
 
+        // Jos sama kurssi tuli uudelleen tiedostossa, viimeisin jää voimaan
         if(it != courses_under_theme.end()){
             courses_under_theme.erase(it);
         }
@@ -309,6 +310,8 @@ bool courses_command(std::vector<std::string>& parameters,
     std::string location = parameters.at(0);
     std::string theme = parameters.at(1);
     std::map<std::string, int> names_and_enrollments = {};
+    // Lisätään teeman annetulle paikkakunnalla olevat kurssit ja
+    // osallistujamäärät uuteen tietorakenteeseen
     for(const Course& course : courses_by_theme[theme]){
         if(course.location == location){
             names_and_enrollments[course.name] = course.enrollments;
@@ -334,7 +337,7 @@ void available_command(CourseCenterMap& courses_by_theme){
     std::map<std::string, std::vector<std::string>> courses_in_locations = {};
     for(const auto& pair : courses_by_theme){
         std::string theme = pair.first;
-
+        // Selvitetään kaikki teeman saatavilla olevat kurssit
         for(const Course& course : pair.second){
             if(course.enrollments != COURSE_FULL){
                 courses_in_locations.try_emplace({});
@@ -415,6 +418,7 @@ bool favorite_theme_command(CourseCenterMap& courses_by_theme){
 
     std::map< std::string, int> enrollments_by_theme = {};
     auto it = courses_by_theme.begin();
+    // Selvitetään kaikkien teemojen yhteenlaskettu osallistujamäätä
     for(; it != courses_by_theme.end(); ++it){
         enrollments_by_theme.try_emplace({});
         int enrollments = 0;
@@ -427,6 +431,7 @@ bool favorite_theme_command(CourseCenterMap& courses_by_theme){
     std::map< std::string, int> favorite_themes = {};
     int max_enrollments = 0;
     std::string current_favorite = "";
+    // Selvitetään suosituin/suosituimmat teemat ja lisätään ne mappiin
     for(const auto& pair : enrollments_by_theme){
         if(pair.second > max_enrollments){
             max_enrollments = pair.second;
@@ -457,12 +462,12 @@ void cancel_command(std::vector<std::string>& parameters,
        return;
     }
 
-    std::string course_name = parameters.at(0);
+    std::string course_to_delete = parameters.at(0);
     auto it = courses_by_theme.begin();
     for(; it!= courses_by_theme.end(); ++it){
         auto iter = it->second.begin();
         for(; iter != it->second.end();){
-            if(iter->name == course_name){
+            if(iter->name == course_to_delete){
                 courses_by_theme[it->first].erase(iter);
             }
             else{
@@ -470,7 +475,7 @@ void cancel_command(std::vector<std::string>& parameters,
             }
         }
     }
-    std::cout << course_name << " cancelled in all locations" << std::endl;
+    std::cout << course_to_delete << " cancelled in all locations" << std::endl;
 }
 
 // Funktio ottaa parametrina komennon ja sen parametrit sekä kurssikeskuksen
