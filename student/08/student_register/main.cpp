@@ -68,14 +68,14 @@ bool read_data(const std::string& file_name,
 }
 
 bool write_data(const std::string filepath,
-                const std::map<std::string, Student*>& numerical_order){
+                const std::map<std::string, Student*>& user_id_order){
 
     std::ofstream data_out(filepath);
     if(!data_out){
         return false;
     }
 
-    for(const auto& pair : numerical_order){
+    for(const auto& pair : user_id_order){
         const Student* s = pair.second;
         data_out << s->student_number << ";"
                  << s->user_id        << ";"
@@ -184,7 +184,7 @@ int main() {
             }
 
             if(change_phone_number(*student_numbers.at(student_number))){
-                write_data(file_name, student_numbers);
+                write_data(file_name, user_ids);
             }
 
 
