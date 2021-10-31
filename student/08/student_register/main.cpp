@@ -110,9 +110,11 @@ bool is_valid_phone_number(const std::string number) {
 }
 
 bool change_phone_number(Student& s){
-    std::cout << "Enter a new phone number: " << std::endl;
+    std::cout << "Enter a new phone number: ";
     std::string line;
     std::getline(std::cin, line);
+    std::cout<<std::endl;
+
     if(!is_valid_phone_number(line)){
         return false;
     }
