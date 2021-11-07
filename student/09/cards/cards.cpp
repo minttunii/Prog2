@@ -96,6 +96,7 @@ bool Cards::top_to_bottom()
 
 void Cards::print_from_bottom_to_top(std::ostream &s)
 {
+    recursive_print(top_, s);
 }
 
 Cards::~Cards()
@@ -151,5 +152,13 @@ Card_data *Cards::find_bottom()
 
 int Cards::recursive_print(Card_data *top, std::ostream &s)
 {
-    return 0;
+    if(top == nullptr){
+        //kertoo alimaisen kortin
+        return 1;
+    }
+
+    int running_number = recursive_print(top->next, s);
+    s << running_number << ": " << top->data << std::endl;
+
+    return running_number+1;
 }
