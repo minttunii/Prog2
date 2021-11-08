@@ -106,7 +106,7 @@ void Queue::print() const
         std::cout << current->reg_num << " ";
         current = current->next;
     }
-    std::cout << " waiting in traffic lights" << std::endl;
+    std::cout << "waiting in traffic lights" << std::endl;
 }
 
 bool Queue::is_empty() const
