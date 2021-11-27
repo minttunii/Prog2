@@ -6,8 +6,8 @@ using namespace std;
 // constants, even if they differ from those you see in Plussa.
 // At the end of the course, if you use this program to count your final grade,
 // you should update the constants to make them identical with those in Plussa.
-unsigned int MAX_N_POINTS = 780;
-unsigned int MAX_G_POINTS = 100;
+unsigned int MAX_N_POINTS = 790;
+unsigned int MAX_G_POINTS = 120;
 
 unsigned weekly_excercise_score(unsigned int n, unsigned int g){
     float n_points = (n * 100) / MAX_N_POINTS;
