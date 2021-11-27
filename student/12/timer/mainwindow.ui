@@ -44,21 +44,21 @@
      </widget>
     </item>
     <item row="0" column="0">
-     <widget class="QLCDNumber" name="lcdNumberMinutes">
+     <widget class="QLCDNumber" name="lcdNumberMin">
       <property name="styleSheet">
        <string notr="true">background-color: rgb(114, 159, 207);</string>
       </property>
      </widget>
     </item>
     <item row="1" column="0">
-     <widget class="QLCDNumber" name="lcdNumberSeconds">
+     <widget class="QLCDNumber" name="lcdNumberSec">
       <property name="styleSheet">
        <string notr="true">background-color: rgb(114, 159, 207);</string>
       </property>
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QLabel" name="label_min">
+     <widget class="QLabel" name="minLabel">
       <property name="text">
        <string>minutes</string>
       </property>

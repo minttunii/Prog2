@@ -37,8 +37,8 @@ void MainWindow::onStopButtonClicked()
 
 void MainWindow::onResetButtonClicked()
 {
-    ui->lcdNumberMinutes->display(0);
-    ui->lcdNumberSeconds->display(0);
+    ui->lcdNumberMin->display(0);
+    ui->lcdNumberSec->display(0);
 
 }
 
@@ -49,16 +49,16 @@ void MainWindow::onCloseButtonClicked()
 
 void MainWindow::onSecTimer()
 {
-    int seconds = ui->lcdNumberSeconds->intValue();
-    int minutes = ui->lcdNumberMinutes->intValue();
+    int seconds = ui->lcdNumberSec->intValue();
+    int minutes = ui->lcdNumberMin->intValue();
 
     ++seconds;
     if(seconds == 60){
         seconds = 0;
         ++minutes;
     }
-    ui->lcdNumberMinutes->display(minutes);
-    ui->lcdNumberSeconds->display(seconds);
+    ui->lcdNumberMin->display(minutes);
+    ui->lcdNumberSec->display(seconds);
 
     static int i = 0;
     ++i;
