@@ -32,11 +32,13 @@ void MainWindow::onFindClicked()
             return;
         }
         while(getline(filein, read_line)){
-
+            if(ui->matchCheckBox->isChecked()){
+                std::transform(read_line.begin(), read_line.end(), read_line.begin(), ::tolower);
+            }
             if(read_line.find(wanted_word) != std::string::npos){
-                ui->textBrowser->setText("Word found");
-                filein.close();
-                return;
+               ui->textBrowser->setText("Word found");
+               filein.close();
+               return;
             }
         }
         ui->textBrowser->setText("Word not found");
