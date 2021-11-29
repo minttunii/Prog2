@@ -32,7 +32,7 @@ void MainWindow::onFindClicked()
             return;
         }
         while(getline(filein, read_line)){
-            if(ui->matchCheckBox->isChecked()){
+            if(!ui->matchCheckBox->isChecked()){
                 std::transform(read_line.begin(), read_line.end(), read_line.begin(), ::tolower);
                 std::transform(wanted_word.begin(), wanted_word.end(), wanted_word.begin(), ::tolower);
             }
